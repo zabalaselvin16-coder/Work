@@ -1,1 +1,2456 @@
-hellow
+<!-- Código HTML con auto-guardado activo integrado -->
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Control de Pedidos e Imprenta con ROI, ROA, ROAS y Auditoría</title>
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --primary-light: #1e293b;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --success-color: #059669;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+            --bg-main: #f8fafc;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --radius: 10px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            margin: 0;
+            padding: 30px 20px;
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 30px;
+            border-radius: var(--radius);
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            border-bottom: 4px solid var(--accent-color);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        p.subtitle {
+            margin: 8px 0 0 0;
+            opacity: 0.85;
+            font-size: 15px;
+            font-weight: 300;
+        }
+
+        /* Sistema de Pestañas */
+        .tab-nav {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+            background: #ffffff;
+            padding: 8px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            flex-wrap: wrap;
+            border: 1px solid var(--border-color);
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 12px 24px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 8px;
+            color: var(--text-muted);
+            transition: all 0.25s ease;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary-color);
+            background: #f1f5f9;
+        }
+
+        .tab-btn.active {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.2);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(4px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Indicador de Auto-Guardado */
+        .save-status {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #10b981;
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        /* Grid Principal */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        @media(min-width: 992px) {
+            .grid {
+                grid-template-columns: 380px 1fr;
+            }
+        }
+
+        .card {
+            background: var(--bg-card);
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            border: 1px solid var(--border-color);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--bg-main);
+            padding-bottom: 12px;
+            letter-spacing: -0.3px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 13px;
+            color: var(--text-main);
+            background-color: #ffffff;
+            transition: all 0.2s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .monto-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 10px;
+        }
+
+        .btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            width: 100%;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+        }
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .btn-export {
+            background-color: var(--success-color);
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
+        }
+
+        .btn-export:hover {
+            background-color: #047857;
+            box-shadow: 0 4px 8px rgba(5, 150, 105, 0.3);
+        }
+
+        .btn-danger-clear {
+            background-color: var(--danger-color);
+            margin-top: 10px;
+            font-size: 12px;
+            padding: 8px;
+            box-shadow: none;
+        }
+
+        .btn-danger-clear:hover {
+            background-color: #b91c1c;
+            transform: none;
+        }
+
+        /* Panel Analítico */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+            transition: transform 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .stat-card h4 {
+            margin: 0 0 8px 0;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .stat-card .val {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+
+        .stat-card .pct {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* Panel ROI / ROA / ROAS */
+        .roi-panel {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .roi-panel h3 {
+            margin-top: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #166534;
+            border-bottom: 1px solid #dcfce7;
+            padding-bottom: 10px;
+        }
+
+        .roi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .roi-card {
+            background: white;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 14px;
+            text-align: center;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+        }
+
+        .roi-card span {
+            font-size: 11px;
+            color: #166534;
+            text-transform: uppercase;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .roi-card strong {
+            font-size: 16px;
+            color: var(--primary-color);
+        }
+
+        /* Tabla */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            text-align: left;
+            background: white;
+        }
+
+        th,
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: #f8fafc;
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            color: white;
+            display: inline-block;
+            letter-spacing: 0.3px;
+        }
+
+        .bg-whatsapp {
+            background-color: #10b981;
+        }
+
+        .bg-instagram {
+            background-color: #db2777;
+        }
+
+        .bg-facebook {
+            background-color: #2563eb;
+        }
+
+        .bg-tiktok {
+            background-color: #0f172a;
+        }
+
+        .bg-otros {
+            background-color: #64748b;
+        }
+
+        .bg-entrega {
+            background-color: #7c3aed;
+        }
+
+        .bg-disenador {
+            background-color: #0284c7;
+        }
+
+        /* Barra de Progreso */
+        .progress-bar-container {
+            background-color: #e2e8f0;
+            border-radius: 6px;
+            width: 100%;
+            height: 6px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--success-color);
+            border-radius: 6px;
+            transition: width 0.4s ease;
+        }
+
+        .progress-text {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            display: block;
+            margin-top: 3px;
+        }
+
+        .actions-btn {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 4px;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .actions-btn:hover {
+            background-color: #b91c1c;
+        }
+
+        .edit-btn {
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 3px;
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .edit-btn:hover {
+            background-color: #047857;
+        }
+
+        .select-client-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 5px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: 600;
+            margin-right: 4px;
+            transition: background 0.2s;
+        }
+
+        .select-client-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .msg-btn {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 3px;
+            text-align: center;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .msg-btn:hover {
+            background-color: #059669;
+        }
+
+        .print-btn {
+            background-color: var(--warning-color);
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 3px;
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+            transition: background 0.2s;
+        }
+
+        .print-btn:hover {
+            background-color: #b45309;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        /* Auditoría Ampliada y Profesional */
+        .audit-box-container {
+            background: #0f172a;
+            color: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+            border: 1px solid #1e293b;
+        }
+
+        .audit-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 10px;
+            font-weight: 600;
+            color: #94a3b8;
+        }
+
+        .audit-list {
+            max-height: 280px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .audit-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .audit-list::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 3px;
+        }
+
+        .audit-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #1e293b;
+            line-height: 1.5;
+        }
+
+        .audit-time {
+            color: #38bdf8;
+        }
+
+        .audit-action-tag {
+            background: #1e293b;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #fbbf24;
+            border: 1px solid #334155;
+        }
+
+        /* Celdas editables en catálogos */
+        .editable-cell {
+            background-color: #fefce8;
+            border: 1px dashed #f59e0b;
+            padding: 6px 8px;
+            cursor: text;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .editable-cell:focus {
+            background-color: #ffffff;
+            border: 1px solid var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        /* Estilos para RIFs múltiples */
+        .rif-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 8px;
+            margin-bottom: 8px;
+            align-items: center;
+        }
+
+        /* Estilos de Pestañas de Clientes Activos (Múltiples Clientes en Simultáneo) */
+        .order-tabs-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .order-tab-chip {
+            background: #e2e8f0;
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            color: var(--text-main);
+        }
+
+        .order-tab-chip.active {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-hover);
+        }
+
+        .order-tab-chip .close-tab {
+            font-size: 10px;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <div class="save-status">
+                <span class="status-dot"></span>
+                <span id="saveText">Protección Anti-Cortes Activa</span>
+            </div>
+            <h1>Sistema de Control de Pedidos e Imprenta</h1>
+            <p class="subtitle">Multi-Moneda, Talonarios, ROI/ROA/ROAS, Auditoría y Auto-Guardado</p>
+        </header>
+
+        <!-- Navegación por Pestañas Principales -->
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="cambiarPestana('pedidosTab', this)">Control de Pedidos y
+                Caja</button>
+            <button class="tab-btn" onclick="cambiarPestana('catalogoTab', this)">Catálogo y Lista de Precios</button>
+            <button class="tab-btn" onclick="cambiarPestana('creditosTab', this)">Clientes a Crédito (Pagos /
+                Deuda)</button>
+            <button class="tab-btn" onclick="cambiarPestana('baseClientesTab', this)">Base de Clientes Fijos</button>
+        </div>
+
+        <!-- PESTAÑA 1: SISTEMA DE PEDIDOS -->
+        <div id="pedidosTab" class="tab-content active">
+
+            <!-- BARRA DE PESTAÑAS DE CLIENTES ACTIVOS (MÚLTIPLES CLIENTES EN SIMULTÁNEO) -->
+            <div class="card" style="padding: 15px 25px; margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span
+                        style="font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Pestañas
+                        de Clientes Simultáneos (Atención Múltiple):</span>
+                    <button type="button" class="btn"
+                        style="width: auto; padding: 6px 14px; font-size: 12px; background-color: var(--success-color);"
+                        onclick="abrirNuevoClienteSimultaneo()">+ Abrir Nuevo Cliente (No cerrar actual)</button>
+                </div>
+                <div class="order-tabs-bar" id="orderTabsBar"></div>
+            </div>
+
+            <div class="grid">
+                <!-- Formulario Izquierda (Especificaciones del Talonario) -->
+                <div>
+                    <div class="card">
+                        <h2 id="formTitle">Nuevo Registro / Talonario</h2>
+                        <form id="pedidoForm">
+                            <input type="hidden" id="editandoId" value="">
+                            <div class="form-group">
+                                <label for="vendedor">Nombre del Vendedor / Receptor :</label>
+                                <input type="text" id="vendedor" required placeholder="Ej. Carlos Mendoza"
+                                    oninput="autoGuardarBorrador()">
+                            </div>
+                            <div class="form-group">
+                                <label for="disenador">Nombre del Diseñador :</label>
+                                <input type="text" id="disenador" placeholder="Ej. Ana Gómez"
+                                    oninput="autoGuardarBorrador()">
+                            </div>
+                            <div class="form-group">
+                                <label for="numeracion">Numeración :</label>
+                                <input type="text" id="numeracion" placeholder="Ej. 001 al 100"
+                                    oninput="autoGuardarBorrador()">
+                            </div>
+                            <div class="form-group">
+                                <label for="fecha">Fecha :</label>
+                                <input type="date" id="fecha" required onchange="autoGuardarBorrador()">
+                            </div>
+                            <div class="form-group">
+                                <label for="cliente">Nombre del Cliente :</label>
+                                <input type="text" id="cliente" required placeholder="Ej. Juan Pérez"
+                                    oninput="autoGuardarBorrador()">
+                            </div>
+                            <div class="form-group">
+                                <label for="contacto">Teléfono del Cliente :</label>
+                                <input type="text" id="contacto" required placeholder="Ej. +584120000000"
+                                    oninput="autoGuardarBorrador()">
+                            </div>
+
+                            <!-- SECCIÓN: MÚLTIPLES RIFS POR PEDIDO -->
+                            <div class="form-group"
+                                style="background: #f8fafc; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;">
+                                <label style="color: var(--primary-color);">Distribución por RIF / Cantidades :</label>
+                                <p style="font-size: 11px; color: var(--text-muted); margin: 0 0 10px 0;">Añade los
+                                    diferentes RIFs y la cantidad correspondiente si el pedido se divide en varios.</p>
+                                <div id="rifsContainer"></div>
+                                <button type="button" class="btn"
+                                    style="background-color: var(--primary-light); padding: 8px; font-size: 12px; margin-top: 5px;"
+                                    onclick="agregarCampoRif()">+ Agregar RIF / Cantidad</button>
+                            </div>
+
+                            <!-- SECCIÓN ESPECIAL -->
+                            <div class="form-group">
+                                <label for="referidoEspecial">Referido Especial :</label>
+                                <select id="referidoEspecial" required onchange="autoGuardarBorrador()">
+                                    <option value="Ninguno">Ninguno</option>
+                                    <option value="Arturo Padilla">Arturo Padilla</option>
+                                    <option value="Andreina Araque">Andreina Araque</option>
+                                </select>
+                                <small style="color: #64748b; font-size: 11px;">Indicar si el cliente es referido
+                                    especial de Arturo Padilla o de Andreina Araque.</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="redSocial">Medio de Contacto / Red Social :</label>
+                                <select id="redSocial" required onchange="autoGuardarBorrador()">
+                                    <option value="WhatsApp">WhatsApp</option>
+                                    <option value="Instagram">Instagram</option>
+                                    <option value="Facebook">Facebook</option>
+                                    <option value="TikTok">TikTok</option>
+                                    <option value="Otra">Otra Red / Directo</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="tipoEntrega">Tipo de Entrega :</label>
+                                <select id="tipoEntrega" required onchange="autoGuardarBorrador()">
+                                    <option value="Delivery">Delivery</option>
+                                    <option value="Pick up">Pick up</option>
+                                    <option value="Zoom">Zoom</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="inversionPubli">Inversión Publicitaria ($ Ads) :</label>
+                                <input type="number" id="inversionPubli" step="0.01" value="0.00" required
+                                    placeholder="0.00" oninput="autoGuardarBorrador()">
+                                <small style="color: #64748b; font-size: 11px;">Gasto publicitario para conseguir este
+                                    pedido o en esta red.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="nombreTalonario">Nombre del Talonario :</label>
+                                <input type="text" id="nombreTalonario" placeholder="Ej. Talonario de Recibos Factura"
+                                    oninput="autoGuardarBorrador()">
+                            </div>
+                            <div class="form-group">
+                                <label for="detalles">Pedido :</label>
+                                <textarea id="detalles" rows="2" required
+                                    placeholder="Descripción detallada del pedido..."
+                                    oninput="autoGuardarBorrador()"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="tipoPapel">Tipo de Papel / Material :</label>
+                                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                    <select id="tipoPapel" required onchange="autoGuardarBorrador()" style="flex: 1;">
+                                        <option value="vinyl">vinyl</option>
+                                        <option value="bond">bond</option>
+                                        <option value="quimico">quimico</option>
+                                        <option value="glase 150 gr">glase 150 gr</option>
+                                        <option value="glase 200 gr">glase 200 gr</option>
+                                        <option value="glase 350 gr">glase 350 gr</option>
+                                        <option value="banner 130x">banner 130x</option>
+                                        <option value="Acrilico">Acrilico</option>
+                                        <option value="PVC">PVC</option>
+                                        <option value="MDF">MDF</option>
+                                        <option value="Sublimacion">Sublimacion</option>
+                                        <option value="Grabado Laser">Grabado Laser</option>
+                                        <option value="DTF Textil">DTF Textil</option>
+                                        <option value="DTF UV">DTF UV</option>
+                                    </select>
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <input type="text" id="nuevoTipoPapelInput" placeholder="Añadir otro material..."
+                                        style="flex: 1; font-size: 12px; padding: 6px 10px;">
+                                    <button type="button" class="btn"
+                                        style="width: auto; padding: 6px 12px; font-size: 12px; background-color: var(--primary-light);"
+                                        onclick="agregarNuevoTipoPapel()">+ Añadir</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="cantidad">Cantidad Total :</label>
+                                <input type="text" id="cantidad" placeholder="Ej. 5 Talonarios (50x2)"
+                                    oninput="autoGuardarBorrador()">
+                            </div>
+                            <div class="form-group">
+                                <label for="monto">Monto Total y Moneda :</label>
+                                <div class="monto-container">
+                                    <input type="number" id="monto" step="0.01" required placeholder="0.00"
+                                        oninput="autoGuardarBorrador()">
+                                    <select id="moneda" onchange="autoGuardarBorrador()">
+                                        <option value="USD">USD ($)</option>
+                                        <option value="EUR">EUR (€)</option>
+                                        <option value="VES">VES (Bs)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="abono">Abono / Anticipo :</label>
+                                <input type="number" id="abono" step="0.01" value="0.00" required placeholder="0.00"
+                                    oninput="autoGuardarBorrador()">
+                            </div>
+                            <div class="form-group">
+                                <label for="control">Control :</label>
+                                <input type="text" id="control" placeholder="Ej. Consecutivo / Control interno #12"
+                                    oninput="autoGuardarBorrador()">
+                            </div>
+                            <div class="form-group">
+                                <label for="datosTalonario">Datos del Talonario :</label>
+                                <input type="text" id="datosTalonario"
+                                    placeholder="Ej. Original y 2 Copias (Triplicado)" oninput="autoGuardarBorrador()">
+                            </div>
+                            <div class="form-group">
+                                <label for="observaciones">Observaciones Adicionales :</label>
+                                <textarea id="observaciones" rows="2"
+                                    placeholder="Notas especiales, tintas, perforación..."
+                                    oninput="autoGuardarBorrador()"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="status">Estado del Pedido (Seguimiento)</label>
+                                <select id="status" required onchange="autoGuardarBorrador()">
+                                    <option value="Pendiente">Pendiente por Pagar (10%)</option>
+                                    <option value="En Diseño">En Diseño / Aprobación (35%)</option>
+                                    <option value="En Impresión">En Impresión (70%)</option>
+                                    <option value="Entregado">Entregado / Listo (100%)</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; gap: 10px;">
+                                <button type="submit" class="btn" id="btnGuardarPedido" style="flex: 2;">Guardar
+                                    Pedido</button>
+                                <button type="button" class="btn" id="btnCancelarEdicion"
+                                    style="background-color: var(--text-muted); display: none; flex: 1;"
+                                    onclick="cancelarEdicion()">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Sección de Clientes Mejorada con Autocompletado Rápido -->
+                    <div class="card">
+                        <h2>Almacenamiento e Historial de Clientes</h2>
+                        <p style="font-size: 12px; color: var(--text-muted); margin-top: 0; margin-bottom: 12px;">Los
+                            clientes se guardan automáticamente al registrar pedidos, o puedes ingresarlos aquí para
+                            rellenar con un clic.</p>
+                        <div class="form-group">
+                            <input type="text" id="nombreClienteBase" placeholder="Nombre del Cliente">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="telefonoClienteBase" placeholder="Teléfono / Contacto">
+                        </div>
+                        <button class="btn" style="background-color: var(--success-color);"
+                            onclick="guardarClienteBase()">Registrar Cliente en Base de Datos</button>
+
+                        <div class="form-group search-box" style="margin-top: 15px;">
+                            <input type="text" id="buscarClienteBase" onkeyup="filtrarClientesBase()"
+                                placeholder="Buscar cliente guardado...">
+                        </div>
+
+                        <div class="table-container" style="max-height: 220px; overflow-y: auto;">
+                            <table id="tablaClientes">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre / Teléfono</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listaClientesBase"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Sección de Auditoría Profesional -->
+                    <div class="card">
+                        <h2>Auditoría del Sistema & Registro de Cambios</h2>
+                        <div class="audit-box-container">
+                            <div class="audit-toolbar">
+                                <span>Historial de Actividad Global</span>
+                                <button class="btn btn-danger-clear" onclick="limpiarAuditoria()">Limpiar
+                                    Registro</button>
+                            </div>
+                            <div class="audit-list" id="auditContainer"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel de Análisis y Tabla Derecha -->
+                <div>
+                    <!-- Análisis por Redes y Monedas -->
+                    <div class="card">
+                        <h2>Ventas Totales por Medio de Contacto</h2>
+                        <div class="analytics-grid" id="analyticsContainer"></div>
+                    </div>
+
+                    <!-- Panel de Análisis Financiero de Marketing (ROI, ROA, ROAS) -->
+                    <div class="roi-panel">
+                        <h3>Optimización de Marketing & Análisis ROI / ROA / ROAS</h3>
+                        <p style="font-size: 12px; color: #166534; margin-top: 5px; margin-bottom: 12px;">Cálculo
+                            automático de rendimiento publicitario, ganancia neta e inversión recomendada por red
+                            social.</p>
+                        <div class="roi-grid" id="roiContainer"></div>
+                    </div>
+
+                    <!-- Tabla de Datos con Seguimiento -->
+                    <div class="card">
+                        <h2>Panel de Pedidos & Estado de Avance</h2>
+                        <button class="btn btn-export" onclick="exportarExcelCSV()">Descargar Respaldo Estilo Excel /
+                            CSV</button>
+
+                        <div class="form-group search-box">
+                            <input type="text" id="buscar" onkeyup="filtrarPedidos()"
+                                placeholder="Buscar por cliente, talonario, número, RIF o detalles...">
+                        </div>
+
+                        <div class="table-container">
+                            <table id="tablaPedidos">
+                                <thead>
+                                    <tr>
+                                        <th>Vendedor / Fecha</th>
+                                        <th>Diseñador</th>
+                                        <th>Núm. / Cliente / RIFs</th>
+                                        <th>Medio / Entrega / Talonario</th>
+                                        <th>Inversión Ads</th>
+                                        <th>Pedido & Papel</th>
+                                        <th>Cant. / Control</th>
+                                        <th>Monto & Abonos</th>
+                                        <th>Avance / Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listaPedidos"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PESTAÑA 2: CATÁLOGO Y LISTA DE PRECIOS CON TASA DEL DÓLAR -->
+        <div id="catalogoTab" class="tab-content">
+            <div class="card">
+                <h2>Catálogo General y Lista de Precios de Imprenta</h2>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Consulte y actualice los
+                    precios oficiales. Ingrese la <strong>Tasa del Dólar del Día</strong> para recalcular
+                    automáticamente todos los precios en bolívares en tiempo real.</p>
+
+                <!-- CONTROLES DE TASA DEL DÓLAR -->
+                <div
+                    style="background: #f1f5f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap; border: 1px solid var(--border-color);">
+                    <div style="flex: 1; min-width: 240px;">
+                        <label for="tasaDolarInput">Tasa del Dólar del Día (Bs / $):</label>
+                        <input type="number" id="tasaDolarInput" step="0.01" value="36.00"
+                            oninput="actualizarTasaDolar()" placeholder="Ej. 36.50">
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: flex-end;">
+                        <button class="btn" style="background-color: var(--success-color); height: 41px;"
+                            onclick="aplicarTasaDolarACatalogo()">Actualizar Precios en Bs</button>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+                    <button class="btn" style="background-color: var(--success-color); width: auto;"
+                        onclick="agregarFilaCatalogo()">Agregar Producto / Servicio</button>
+                    <button class="btn" style="background-color: var(--danger-color); width: auto;"
+                        onclick="restaurarCatalogoOriginal()">Restaurar Catálogo Inicial</button>
+                </div>
+
+                <div class="form-group search-box">
+                    <input type="text" id="buscarCatalogo" onkeyup="filtrarCatalogo()"
+                        placeholder="Filtrar productos en la lista de precios...">
+                </div>
+
+                <div class="table-container">
+                    <table id="tablaPreciosCatalogo">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Tamaño</th>
+                                <th>Material</th>
+                                <th>Cantidad</th>
+                                <th>Precio USD ($)</th>
+                                <th>IVA (16%)</th>
+                                <th>Total PVP ($)</th>
+                                <th>Precio Bs (Tasa)</th>
+                                <th>Total PVP Bs</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="catalogoTbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PESTAÑA 3: CLIENTES A CRÉDITO -->
+        <div id="creditosTab" class="tab-content">
+            <div class="grid">
+                <div>
+                    <div class="card">
+                        <h2>Control de Clientes a Crédito</h2>
+                        <form id="creditoForm">
+                            <div class="form-group">
+                                <label for="creditoFecha">Fecha :</label>
+                                <input type="datetime-local" id="creditoFecha" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="creditoNombre">Nombre del Cliente :</label>
+                                <input type="text" id="creditoNombre" required placeholder="Ej. Henry Falcon">
+                            </div>
+                            <div class="form-group">
+                                <label for="creditoProducto">Producto / Detalle :</label>
+                                <input type="text" id="creditoProducto" placeholder="Ej. Talonarios a crédito">
+                            </div>
+                            <div class="form-group">
+                                <label for="creditoCantidad">Cantidad :</label>
+                                <input type="text" id="creditoCantidad" placeholder="Ej. 2 unidades">
+                            </div>
+                            <div class="form-group">
+                                <label for="creditoMonto">Monto Total ($) :</label>
+                                <input type="number" id="creditoMonto" step="0.01" required placeholder="0.00">
+                            </div>
+                            <div class="form-group">
+                                <label for="creditoEstadoPago">Estado del Pago :</label>
+                                <select id="creditoEstadoPago" required>
+                                    <option value="PAGO">PAGO (Cancelado)</option>
+                                    <option value="NO PAGO">NO PAGO (Pendiente / Crédito)</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                                <button type="submit" class="btn"
+                                    style="background-color: var(--accent-color); flex: 2;">PROCESAR</button>
+                                <button type="button" class="btn" style="background-color: var(--text-muted); flex: 1;"
+                                    onclick="limpiarFormCredito()">NUEVO</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card">
+                        <h2>Listado de Clientes a Crédito y Estado de Pagos</h2>
+                        <div class="form-group search-box">
+                            <input type="text" id="buscarCredito" onkeyup="filtrarCreditos()"
+                                placeholder="Buscar cliente o producto a crédito...">
+                        </div>
+                        <div class="table-container">
+                            <table id="tablaCreditos">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Cliente</th>
+                                        <th>Producto / Cantidad</th>
+                                        <th>Monto ($)</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listaCreditos"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PESTAÑA 4: BASE DE DATOS DE CLIENTES FIJOS -->
+        <div id="baseClientesTab" class="tab-content">
+            <div class="grid">
+                <div>
+                    <div class="card">
+                        <h2>Registrar / Editar Cliente Fijo</h2>
+                        <form id="clienteFijoForm" onsubmit="guardarClienteFijoDirecto(event)">
+                            <input type="hidden" id="editandoClienteId" value="">
+                            <div class="form-group">
+                                <label for="fijoNombre">Nombre y Apellido / Razón Social :</label>
+                                <input type="text" id="fijoNombre" required placeholder="Ej. Inversiones C.A.">
+                            </div>
+                            <div class="form-group">
+                                <label for="fijoRif">Cédula o RIF Principal :</label>
+                                <input type="text" id="fijoRif" placeholder="Ej. J-12345678-9">
+                            </div>
+                            <div class="form-group">
+                                <label for="fijoTelefono">Teléfono de Contacto :</label>
+                                <input type="text" id="fijoTelefono" required placeholder="Ej. +584120000000">
+                            </div>
+                            <div class="form-group">
+                                <label for="fijoCorreo">Correo Electrónico :</label>
+                                <input type="email" id="fijoCorreo" placeholder="Ej. cliente@correo.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="fijoDireccion">Dirección de Entrega / Fiscal :</label>
+                                <textarea id="fijoDireccion" rows="2"
+                                    placeholder="Ubicación o dirección completa..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="fijoNotas">Notas / Observaciones Frecuentes :</label>
+                                <textarea id="fijoNotas" rows="2"
+                                    placeholder="Preferencias, tipo de papel recurrente..."></textarea>
+                            </div>
+                            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                                <button type="submit" class="btn" id="btnGuardarClienteFijo"
+                                    style="background-color: var(--success-color); flex: 2;">Guardar Cliente</button>
+                                <button type="button" class="btn" id="btnCancelarEdicionCliente"
+                                    style="background-color: var(--text-muted); display: none; flex: 1;"
+                                    onclick="cancelarEdicionClienteFijo()">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card">
+                        <h2>Base de Datos de Clientes Fijos (Información para Futuras Compras)</h2>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Consulte la
+                            información completa de sus clientes registrados para agilizar futuras compras y pedidos.
+                        </p>
+                        <div class="form-group search-box">
+                            <input type="text" id="buscarClientesFijos" onkeyup="filtrarClientesFijosTabla()"
+                                placeholder="Buscar por nombre, RIF, teléfono o correo...">
+                        </div>
+                        <div class="table-container">
+                            <table id="tablaClientesFijosGeneral">
+                                <thead>
+                                    <tr>
+                                        <th>Cliente / Razón Social</th>
+                                        <th>RIF / Cédula</th>
+                                        <th>Contacto y Correo</th>
+                                        <th>Dirección / Notas</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listaClientesFijosTbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let pedidos = JSON.parse(localStorage.getItem('pedidos_imprenta_v5')) || [];
+        let clientesBase = JSON.parse(localStorage.getItem('clientes_imprenta_base')) || [];
+        let clientesFijosBD = JSON.parse(localStorage.getItem('clientes_fijos_bd_v1')) || [];
+        let auditoria = JSON.parse(localStorage.getItem('auditoria_imprenta_v5')) || [];
+        let creditos = JSON.parse(localStorage.getItem('creditos_imprenta_v1')) || [];
+        let tasaDolar = parseFloat(localStorage.getItem('tasa_dolar_imprenta')) || 36.00;
+
+        // SISTEMA DE PESTAÑAS SIMULTÁNEAS (MÚLTIPLES CLIENTES ABIERTOS)
+        let clientesAbiertos = JSON.parse(localStorage.getItem('clientes_abiertos_simultaneos')) || [
+            { id: 'default_1', nombre: 'Cliente 1 (Principal)', datos: {} }
+        ];
+        let clienteActivoId = localStorage.getItem('cliente_activo_id') || 'default_1';
+
+        const catalogoInicial = [
+            { prod: "TALONARIO", tam: "1/4 DE CARTA", mat: "BOND", cant: "2", pUSD: 12.00, iva: 1.92, pvpUSD: 13.92 },
+            { prod: "TALONARIO", tam: "1/4 DE CARTA", mat: "QUIMICO", cant: "2", pUSD: 18.00, iva: 2.88, pvpUSD: 20.88 },
+            { prod: "TALONARIO", tam: "1/4 DE CARTA", mat: "BOND", cant: "6", pUSD: 25.00, iva: 4.00, pvpUSD: 29.00 },
+            { prod: "TALONARIO", tam: "1/4 DE CARTA", mat: "QUIMICO", cant: "6", pUSD: 30.00, iva: 5.60, pvpUSD: 40.60 },
+            { prod: "TALONARIO", tam: "1/4 DE CARTA", mat: "BOND", cant: "10", pUSD: 40.00, iva: 6.40, pvpUSD: 46.40 },
+            { prod: "TALONARIO", tam: "1/4 DE CARTA", mat: "QUIMICO", cant: "10", pUSD: 60.00, iva: 9.60, pvpUSD: 69.60 },
+            { prod: "TALONARIO", tam: "1/2 CARTA", mat: "BOND", cant: "1", pUSD: 12.00, iva: 1.92, pvpUSD: 13.92 },
+            { prod: "TALONARIO", tam: "1/2 CARTA", mat: "QUIMICO", cant: "1", pUSD: 15.00, iva: 2.40, pvpUSD: 17.40 },
+            { prod: "TALONARIO", tam: "1/2 CARTA", mat: "BOND", cant: "6", pUSD: 80.00, iva: 12.80, pvpUSD: 92.80 },
+            { prod: "TALONARIO", tam: "1/2 CARTA", mat: "QUIMICO", cant: "6", pUSD: 110.00, iva: 17.60, pvpUSD: 127.60 },
+            { prod: "TALONARIO", tam: "1/2 CARTA", mat: "BOND", cant: "10", pUSD: 100.00, iva: 16.00, pvpUSD: 116.00 },
+            { prod: "TALONARIO", tam: "1/2 CARTA", mat: "QUIMICO", cant: "10", pUSD: 150.00, iva: 24.00, pvpUSD: 174.00 },
+            { prod: "TALONARIO", tam: "CARTA", mat: "BOND", cant: "1", pUSD: 20.00, iva: 3.20, pvpUSD: 23.20 },
+            { prod: "TALONARIO", tam: "CARTA", mat: "QUIMICO", cant: "1", pUSD: 25.00, iva: 4.00, pvpUSD: 29.00 },
+            { prod: "TALONARIO", tam: "CARTA", mat: "BOND", cant: "5", pUSD: 85.00, iva: 13.60, pvpUSD: 98.60 },
+            { prod: "TALONARIO", tam: "CARTA", mat: "QUIMICO", cant: "5", pUSD: 110.00, iva: 17.60, pvpUSD: 127.60 },
+            { prod: "TALONARIO", tam: "CARTA", mat: "BOND", cant: "10", pUSD: 150.00, iva: 24.00, pvpUSD: 174.00 },
+            { prod: "TALONARIO", tam: "CARTA", mat: "QUIMICO", cant: "10", pUSD: 180.00, iva: 28.80, pvpUSD: 208.80 },
+            { prod: "SELLO MADERA", tam: "VARIABLE", mat: "MADERA", cant: "1", pUSD: 15.00, iva: 2.40, pvpUSD: 17.40 },
+            { prod: "SELLO AUTOMATICO", tam: "PEQUEÑO 4911", mat: "PLASTICO", cant: "1", pUSD: 20.00, iva: 3.20, pvpUSD: 23.20 },
+            { prod: "SELLO AUTOMATICO", tam: "MEDIANO 4912", mat: "PLASTICO", cant: "1", pUSD: 25.00, iva: 4.00, pvpUSD: 29.00 },
+            { prod: "SELLO AUTOMATICO", tam: "GRANDE 4913", mat: "PLASTICO", cant: "1", pUSD: 30.00, iva: 4.80, pvpUSD: 34.80 },
+            { prod: "TARJETA DE PRESENTACION", tam: "UNA CARA", mat: "GLASSE 300", cant: "120", pUSD: 12.00, iva: 1.92, pvpUSD: 13.92 },
+            { prod: "TARJETA DE PRESENTACION", tam: "DOS CARA", mat: "GLASSE 300", cant: "120", pUSD: 25.00, iva: 4.00, pvpUSD: 29.00 },
+            { prod: "VOLANTES BLANCO Y NEGRO EPSON", tam: "1/4 DE CARTA", mat: "BOND", cant: "100", pUSD: 5.00, iva: 0.80, pvpUSD: 5.80 },
+            { prod: "VOLANTES COLOR EPSON", tam: "1/2 CARTA", mat: "BOND", cant: "100", pUSD: 15.00, iva: 2.40, pvpUSD: 17.40 },
+            { prod: "VOLANTES COLOR RICOH", tam: "1/4 CARTA", mat: "GLASSE 150", cant: "100", pUSD: 30.00, iva: 4.80, pvpUSD: 34.80 },
+            { prod: "VINIL METRO", tam: "METRO", mat: "VINIL", cant: "1", pUSD: 12.00, iva: 1.92, pvpUSD: 13.92 },
+            { prod: "PENDON METRO", tam: "METRO", mat: "BANNER", cant: "1", pUSD: 8.00, iva: 1.28, pvpUSD: 9.28 },
+            { prod: "TAZAS CERAMICA SUBLIMADO", tam: "UNIDAD", mat: "CERAMICA", cant: "1", pUSD: 5.00, iva: 0.80, pvpUSD: 5.80 },
+            { prod: "MINI LANYARD", tam: "TELA", mat: "TELA", cant: "1", pUSD: 1.00, iva: 0.16, pvpUSD: 1.16 }
+        ];
+
+        let catalogoDatos = JSON.parse(localStorage.getItem('catalogo_imprenta_modificable')) || catalogoInicial;
+
+        window.onload = function () {
+            document.getElementById('fecha').valueAsDate = new Date();
+            document.getElementById('tasaDolarInput').value = tasaDolar;
+            agregarCampoRif('', '');
+
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            document.getElementById('creditoFecha').value = now.toISOString().slice(0, 16);
+
+            renderizarPestanasClientes();
+            recuperarBorradorFormulario();
+            actualizarPantalla();
+            renderizarClientesBase();
+            renderizarCreditos();
+            renderizarCatalogo();
+            renderizarClientesFijosTabla();
+
+            if (auditoria.length === 0) {
+                registrarAuditoria('SISTEMA', 'Sistema iniciado correctamente con tasa del dólar dinámica, pestañas múltiples y base de clientes fijos.');
+            }
+        };
+
+        // FUNCIONES DE TASA DEL DÓLAR
+        function actualizarTasaDolar() {
+            const val = parseFloat(document.getElementById('tasaDolarInput').value);
+            if (!isNaN(val) && val > 0) {
+                tasaDolar = val;
+                localStorage.setItem('tasa_dolar_imprenta', tasaDolar);
+                renderizarCatalogo();
+                notificarGuardado('Tasa actualizada');
+            }
+        }
+
+        function aplicarTasaDolarACatalogo() {
+            actualizarTasaDolar();
+            renderizarCatalogo();
+            registrarAuditoria('FINANZAS', `Se aplicó la tasa cambiaria de Bs. ${tasaDolar.toFixed(2)} por USD al catálogo de precios.`);
+            alert(`¡Precios del catálogo actualizados exitosamente a la tasa de Bs. ${tasaDolar.toFixed(2)} / USD!`);
+        }
+
+        // FUNCIONES DE PESTAÑAS MÚLTIPLES DE CLIENTES (ATENCIÓN SIMULTÁNEA)
+        function renderizarPestanasClientes() {
+            const bar = document.getElementById('orderTabsBar');
+            if (!bar) return;
+            bar.innerHTML = '';
+            clientesAbiertos.forEach(tab => {
+                const isActive = tab.id === clienteActivoId;
+                const chip = document.createElement('div');
+                chip.className = `order-tab-chip ${isActive ? 'active' : ''}`;
+                chip.innerHTML = `
+                <span onclick="cambiarClienteActivo('${tab.id}')" style="cursor:pointer; flex:1;">${tab.nombre}</span>
+                ${clientesAbiertos.length > 1 ? `<span class="close-tab" onclick="cerrarClienteSimultaneo(event, '${tab.id}')">x</span>` : ''}
+            `;
+                bar.appendChild(chip);
+            });
+        }
+
+        function abrirNuevoClienteSimultaneo() {
+            guardarBorradorActualEnTab();
+
+            const nombreCliente = prompt("Ingrese el nombre del cliente o descripción para la nueva pestaña:", `Cliente ${clientesAbiertos.length + 1}`);
+            if (!nombreCliente) return;
+
+            const nuevoId = 'cliente_' + Date.now();
+            clientesAbiertos.push({
+                id: nuevoId,
+                nombre: nombreCliente,
+                datos: { fecha: new Date().toISOString().slice(0, 10), redSocial: 'WhatsApp', tipoEntrega: 'Delivery', moneda: 'USD' }
+            });
+
+            clienteActivoId = nuevoId;
+            localStorage.setItem('clientes_abiertos_simultaneos', JSON.stringify(clientesAbiertos));
+            localStorage.setItem('cliente_activo_id', clienteActivoId);
+
+            renderizarPestanasClientes();
+            limpiarFormularioCompleto();
+            notificarGuardado('Nueva pestaña abierta');
+            registrarAuditoria('VENTAS', `Se abrió una pestaña de atención simultánea para: ${nombreCliente}`);
+        }
+
+        function cambiarClienteActivo(id) {
+            guardarBorradorActualEnTab();
+            clienteActivoId = id;
+            localStorage.setItem('cliente_activo_id', clienteActivoId);
+            renderizarPestanasClientes();
+            recuperarBorradorFormulario();
+            notificarGuardado('Pestaña cambiada');
+        }
+
+        function cerrarClienteSimultaneo(event, id) {
+            event.stopPropagation();
+            if (clientesAbiertos.length <= 1) {
+                alert("Debe mantener al menos una pestaña abierta.");
+                return;
+            }
+            if (confirm("¿Desea cerrar esta pestaña de atención? Se perderá el borrador no guardado de este cliente.")) {
+                clientesAbiertos = clientesAbiertos.filter(t => t.id !== id);
+                if (clienteActivoId === id) {
+                    clienteActivoId = clientesAbiertos[0].id;
+                }
+                localStorage.setItem('clientes_abiertos_simultaneos', JSON.stringify(clientesAbiertos));
+                localStorage.setItem('cliente_activo_id', clienteActivoId);
+                renderizarPestanasClientes();
+                recuperarBorradorFormulario();
+            }
+        }
+
+        function guardarBorradorActualEnTab() {
+            const tab = clientesAbiertos.find(t => t.id === clienteActivoId);
+            if (!tab) return;
+
+            const rifsArray = [];
+            document.querySelectorAll('.rif-row').forEach(row => {
+                const r = row.querySelector('.rif-input').value;
+                const c = row.querySelector('.cant-rif-input').value;
+                if (r || c) rifsArray.push({ rif: r, cantidad: c });
+            });
+
+            tab.datos = {
+                vendedor: document.getElementById('vendedor').value,
+                disenador: document.getElementById('disenador').value,
+                numeracion: document.getElementById('numeracion').value,
+                fecha: document.getElementById('fecha').value,
+                cliente: document.getElementById('cliente').value,
+                contacto: document.getElementById('contacto').value,
+                rifs: rifsArray,
+                referidoEspecial: document.getElementById('referidoEspecial').value,
+                redSocial: document.getElementById('redSocial').value,
+                tipoEntrega: document.getElementById('tipoEntrega').value,
+                inversionPubli: document.getElementById('inversionPubli').value,
+                nombreTalonario: document.getElementById('nombreTalonario').value,
+                detalles: document.getElementById('detalles').value,
+                tipoPapel: document.getElementById('tipoPapel').value,
+                cantidad: document.getElementById('cantidad').value,
+                monto: document.getElementById('monto').value,
+                abono: document.getElementById('abono').value,
+                moneda: document.getElementById('moneda').value,
+                control: document.getElementById('control').value,
+                datosTalonario: document.getElementById('datosTalonario').value,
+                observaciones: document.getElementById('observaciones').value,
+                status: document.getElementById('status').value
+            };
+
+            const clienteInputVal = document.getElementById('cliente').value.trim();
+            if (clienteInputVal) {
+                tab.nombre = clienteInputVal;
+            }
+
+            localStorage.setItem('clientes_abiertos_simultaneos', JSON.stringify(clientesAbiertos));
+        }
+
+        function recuperarBorradorFormulario() {
+            const tab = clientesAbiertos.find(t => t.id === clienteActivoId);
+            if (!tab || !tab.datos) return;
+            const b = tab.datos;
+
+            document.getElementById('vendedor').value = b.vendedor || '';
+            document.getElementById('disenador').value = b.disenador || '';
+            document.getElementById('numeracion').value = b.numeracion || '';
+            document.getElementById('fecha').value = b.fecha || new Date().toISOString().slice(0, 10);
+            document.getElementById('cliente').value = b.cliente || '';
+            document.getElementById('contacto').value = b.contacto || '';
+
+            document.getElementById('rifsContainer').innerHTML = '';
+            if (b.rifs && b.rifs.length > 0) {
+                b.rifs.forEach(item => agregarCampoRif(item.rif, item.cantidad));
+            } else {
+                agregarCampoRif('', '');
+            }
+
+            document.getElementById('referidoEspecial').value = b.referidoEspecial || 'Ninguno';
+            document.getElementById('redSocial').value = b.redSocial || 'WhatsApp';
+            document.getElementById('tipoEntrega').value = b.tipoEntrega || 'Delivery';
+            document.getElementById('inversionPubli').value = b.inversionPubli || '0.00';
+            document.getElementById('nombreTalonario').value = b.nombreTalonario || '';
+            document.getElementById('detalles').value = b.detalles || '';
+            document.getElementById('tipoPapel').value = b.tipoPapel || 'vinyl';
+            document.getElementById('cantidad').value = b.cantidad || '';
+            document.getElementById('monto').value = b.monto || '';
+            document.getElementById('abono').value = b.abono || '0.00';
+            document.getElementById('moneda').value = b.moneda || 'USD';
+            document.getElementById('control').value = b.control || '';
+            document.getElementById('datosTalonario').value = b.datosTalonario || '';
+            document.getElementById('observaciones').value = b.observaciones || '';
+            document.getElementById('status').value = b.status || 'Pendiente';
+        }
+
+        function limpiarFormularioCompleto() {
+            document.getElementById('editandoId').value = '';
+            document.getElementById('formTitle').innerText = "Nuevo Registro / Talonario";
+            document.getElementById('btnGuardarPedido').innerText = "Guardar Pedido";
+            document.getElementById('btnCancelarEdicion').style.display = "none";
+            document.getElementById('pedidoForm').reset();
+            document.getElementById('rifsContainer').innerHTML = '';
+            agregarCampoRif('', '');
+            document.getElementById('fecha').valueAsDate = new Date();
+        }
+
+        function autoGuardarBorrador() {
+            guardarBorradorActualEnTab();
+            renderizarPestanasClientes();
+            notificarGuardado('Borrador guardado');
+        }
+
+        function agregarCampoRif(rifVal = '', cantVal = '') {
+            const container = document.getElementById('rifsContainer');
+            const div = document.createElement('div');
+            div.className = 'rif-row';
+            div.innerHTML = `
+            <input type="text" placeholder="Ej. J-12345678-9" value="${rifVal}" class="rif-input" required oninput="autoGuardarBorrador()">
+            <input type="text" placeholder="Cant. Ej. 25" value="${cantVal}" class="cant-rif-input" required oninput="autoGuardarBorrador()">
+            <button type="button" class="actions-btn" style="background-color:var(--danger-color); width:36px; height:38px; margin:0;" onclick="this.parentElement.remove(); autoGuardarBorrador();">X</button>
+        `;
+            container.appendChild(div);
+        }
+
+        function agregarNuevoTipoPapel() {
+            const input = document.getElementById('nuevoTipoPapelInput');
+            const select = document.getElementById('tipoPapel');
+            const nuevoValor = input.value.trim();
+
+            if (!nuevoValor) {
+                alert('Por favor ingresa el nombre del nuevo tipo de papel o material.');
+                return;
+            }
+
+            let existe = false;
+            for (let i = 0; i < select.options.length; i++) {
+                if (select.options[i].value.toLowerCase() === nuevoValor.toLowerCase()) {
+                    existe = true;
+                    break;
+                }
+            }
+
+            if (!existe) {
+                const opt = document.createElement('option');
+                opt.value = nuevoValor;
+                opt.text = nuevoValor;
+                select.appendChild(opt);
+                select.value = nuevoValor;
+                input.value = '';
+                autoGuardarBorrador();
+                registrarAuditoria('CONFIGURACIÓN', `Se añadió la nueva opción de papel/material: ${nuevoValor}`);
+                notificarGuardado('Nuevo material añadido');
+            } else {
+                select.value = nuevoValor;
+                input.value = '';
+                autoGuardarBorrador();
+            }
+        }
+
+        function cambiarPestana(idTab, btnElement) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(idTab).classList.add('active');
+            btnElement.classList.add('active');
+        }
+
+        function renderizarCatalogo() {
+            const tbody = document.getElementById('catalogoTbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            catalogoDatos.forEach((item, index) => {
+                const pUSDNum = parseFloat(item.pUSD) || 0;
+                const ivaNum = parseFloat(item.iva) || (pUSDNum * 0.16);
+                const pvpUSDNum = parseFloat(item.pvpUSD) || (pUSDNum + ivaNum);
+
+                const precioBs = pUSDNum * tasaDolar;
+                const pvpBs = pvpUSDNum * tasaDolar;
+
+                tbody.innerHTML += `
+                <tr>
+                    <td><div class="editable-cell" contenteditable="true" onblur="actualizarCeldaCatalogo(${index}, 'prod', this)">${item.prod}</div></td>
+                    <td><div class="editable-cell" contenteditable="true" onblur="actualizarCeldaCatalogo(${index}, 'tam', this)">${item.tam}</div></td>
+                    <td><div class="editable-cell" contenteditable="true" onblur="actualizarCeldaCatalogo(${index}, 'mat', this)">${item.mat}</div></td>
+                    <td><div class="editable-cell" contenteditable="true" onblur="actualizarCeldaCatalogo(${index}, 'cant', this)">${item.cant}</div></td>
+                    <td><div class="editable-cell" contenteditable="true" onblur="actualizarCeldaCatalogo(${index}, 'pUSD', this)">$${pUSDNum.toFixed(2)}</div></td>
+                    <td>$${ivaNum.toFixed(2)}</td>
+                    <td><strong>$${pvpUSDNum.toFixed(2)}</strong></td>
+                    <td>Bs. ${precioBs.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                    <td><strong style="color:var(--success-color);">Bs. ${pvpBs.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong></td>
+                    <td><button class="actions-btn" onclick="eliminarFilaCatalogo(${index})">Eliminar</button></td>
+                </tr>
+            `;
+            });
+        }
+
+        function actualizarCeldaCatalogo(index, campo, elemento) {
+            let val = elemento.innerText.trim();
+            if (campo === 'pUSD') {
+                val = parseFloat(val.replace('$', '').replace(',', '.')) || 0;
+                catalogoDatos[index]['pUSD'] = val;
+                catalogoDatos[index]['iva'] = val * 0.16;
+                catalogoDatos[index]['pvpUSD'] = val * 1.16;
+            } else {
+                catalogoDatos[index][campo] = val;
+            }
+            localStorage.setItem('catalogo_imprenta_modificable', JSON.stringify(catalogoDatos));
+            renderizarCatalogo();
+            notificarGuardado('Catálogo Actualizado');
+        }
+
+        function agregarFilaCatalogo() {
+            catalogoDatos.push({
+                prod: "NUEVO PRODUCTO",
+                tam: "ESTÁNDAR",
+                mat: "BOND",
+                cant: "1",
+                pUSD: 10.00,
+                iva: 1.60,
+                pvpUSD: 11.60
+            });
+            localStorage.setItem('catalogo_imprenta_modificable', JSON.stringify(catalogoDatos));
+            renderizarCatalogo();
+            registrarAuditoria('CATÁLOGO', 'Se agregó un nuevo producto/servicio al catálogo.');
+            notificarGuardado('Ítem agregado');
+        }
+
+        function eliminarFilaCatalogo(index) {
+            if (confirm('¿Desea eliminar este elemento del catálogo?')) {
+                catalogoDatos.splice(index, 1);
+                localStorage.setItem('catalogo_imprenta_modificable', JSON.stringify(catalogoDatos));
+                renderizarCatalogo();
+                registrarAuditoria('CATÁLOGO', 'Se eliminó un elemento del catálogo.');
+                notificarGuardado('Ítem eliminado');
+            }
+        }
+
+        function restaurarCatalogoOriginal() {
+            if (confirm('¿Desea restaurar el catálogo a sus valores iniciales predeterminados? Se perderán las modificaciones.')) {
+                catalogoDatos = [...catalogoInicial];
+                localStorage.setItem('catalogo_imprenta_modificable', JSON.stringify(catalogoDatos));
+                renderizarCatalogo();
+                registrarAuditoria('CATÁLOGO', 'Se restauró el catálogo a la lista inicial.');
+                notificarGuardado('Catálogo restaurado');
+            }
+        }
+
+        function filtrarCatalogo() {
+            const query = document.getElementById('buscarCatalogo').value.toLowerCase();
+            const filas = document.querySelectorAll('#tablaPreciosCatalogo tbody tr');
+            filas.forEach(fila => {
+                fila.style.display = fila.innerText.toLowerCase().includes(query) ? '' : 'none';
+            });
+        }
+
+        function guardarClienteBase() {
+            const nombre = document.getElementById('nombreClienteBase').value.trim();
+            const tel = document.getElementById('telefonoClienteBase').value.trim();
+            if (!nombre || !tel) return alert("Completa nombre y teléfono del cliente.");
+
+            clientesBase.push({ id: Date.now(), nombre, tel });
+            localStorage.setItem('clientes_imprenta_base', JSON.stringify(clientesBase));
+            document.getElementById('nombreClienteBase').value = '';
+            document.getElementById('telefonoClienteBase').value = '';
+            renderizarClientesBase();
+            registrarAuditoria('CLIENTES', `Nuevo cliente registrado: ${nombre} (${tel})`);
+            alert("¡Cliente guardado exitosamente!");
+        }
+
+        function renderizarClientesBase() {
+            const lista = document.getElementById('listaClientesBase');
+            if (!lista) return;
+            lista.innerHTML = '';
+            if (clientesBase.length === 0) {
+                lista.innerHTML = '<tr><td colspan="2" style="text-align:center; color:#64748b;">No hay clientes guardados aún.</td></tr>';
+                return;
+            }
+            clientesBase.forEach(c => {
+                lista.innerHTML += `
+                <tr class="cliente-row-item">
+                    <td><strong>${c.nombre}</strong><br><small style="color:#64748b;">Tel: ${c.tel}</small></td>
+                    <td>
+                        <button class="select-client-btn" onclick="usarCliente('${c.nombre.replace(/'/g, "\\'")}', '${c.tel}')">Usar</button>
+                        <button class="actions-btn" style="display:inline-block; width:auto; padding:4px 8px;" onclick="eliminarCliente(${c.id})">X</button>
+                    </td>
+                </tr>`;
+            });
+        }
+
+        function filtrarClientesBase() {
+            const query = document.getElementById('buscarClienteBase').value.toLowerCase();
+            const filas = document.querySelectorAll('.cliente-row-item');
+            filas.forEach(fila => {
+                fila.style.display = fila.innerText.toLowerCase().includes(query) ? '' : 'none';
+            });
+        }
+
+        function usarCliente(nombre, tel) {
+            document.getElementById('cliente').value = nombre;
+            document.getElementById('contacto').value = tel;
+            autoGuardarBorrador();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            notificarGuardado('Cliente cargado');
+        }
+
+        function eliminarCliente(id) {
+            if (confirm('¿Eliminar este cliente de la base de datos?')) {
+                clientesBase = clientesBase.filter(c => c.id !== id);
+                localStorage.setItem('clientes_imprenta_base', JSON.stringify(clientesBase));
+                renderizarClientesBase();
+                registrarAuditoria('CLIENTES', 'Cliente eliminado de la base de datos.');
+            }
+        }
+
+        // GESTIÓN COMPLETA DE BASE DE CLIENTES FIJOS (Pestaña 4)
+        function guardarClienteFijoDirecto(e) {
+            e.preventDefault();
+            const editandoId = document.getElementById('editandoClienteId').value;
+            const nombre = document.getElementById('fijoNombre').value.trim();
+            const rif = document.getElementById('fijoRif').value.trim();
+            const telefono = document.getElementById('fijoTelefono').value.trim();
+            const correo = document.getElementById('fijoCorreo').value.trim();
+            const direccion = document.getElementById('fijoDireccion').value.trim();
+            const notas = document.getElementById('fijoNotas').value.trim();
+
+            if (editandoId) {
+                const idx = clientesFijosBD.findIndex(c => c.id == editandoId);
+                if (idx !== -1) {
+                    clientesFijosBD[idx] = { ...clientesFijosBD[idx], nombre, rif, telefono, correo, direccion, notas };
+                    registrarAuditoria('CLIENTES FIJOS', `Se actualizó la información del cliente fijo: ${nombre}`);
+                }
+                cancelarEdicionClienteFijo();
+            } else {
+                const nuevoCliente = { id: Date.now(), nombre, rif, telefono, correo, direccion, notas };
+                clientesFijosBD.unshift(nuevoCliente);
+                registrarAuditoria('CLIENTES FIJOS', `Se registró un nuevo cliente fijo en la base de datos: ${nombre}`);
+                document.getElementById('clienteFijoForm').reset();
+                alert("¡Cliente fijo guardado exitosamente en la base de datos para futuras compras!");
+            }
+
+            localStorage.setItem('clientes_fijos_bd_v1', JSON.stringify(clientesFijosBD));
+            renderizarClientesFijosTabla();
+        }
+
+        function renderizarClientesFijosTabla() {
+            const tbody = document.getElementById('listaClientesFijosTbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            if (clientesFijosBD.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#64748b;">No hay clientes fijos registrados en la base de datos.</td></tr>';
+                return;
+            }
+            clientesFijosBD.forEach(c => {
+                tbody.innerHTML += `
+                <tr>
+                    <td><strong>${c.nombre}</strong></td>
+                    <td>${c.rif || 'S/N'}</td>
+                    <td>Tel: ${c.telefono}<br><small style="color:var(--text-muted);">${c.correo || 'Sin correo'}</small></td>
+                    <td><small><strong>Dir:</strong> ${c.direccion || 'N/A'}</small><br><small style="color:var(--text-muted);"><strong>Notas:</strong> ${c.notas || 'Ninguna'}</small></td>
+                    <td>
+                        <button class="edit-btn" style="width:auto; padding:4px 8px; margin-bottom:2px;" onclick="cargarClienteFijoParaEditar(${c.id})">Editar</button>
+                        <button class="select-client-btn" style="width:auto; padding:4px 8px; margin-right:0;" onclick="usarClienteFijoEnPedido('${c.nombre.replace(/'/g, "\\'")}', '${c.telefono}')">Usar en Pedido</button>
+                        <button class="actions-btn" style="width:auto; padding:4px 8px; margin-top:2px;" onclick="eliminarClienteFijo(${c.id})">Eliminar</button>
+                    </td>
+                </tr>
+            `;
+            });
+        }
+
+        function cargarClienteFijoParaEditar(id) {
+            const c = clientesFijosBD.find(item => item.id === id);
+            if (!c) return;
+            document.getElementById('editandoClienteId').value = c.id;
+            document.getElementById('fijoNombre').value = c.nombre || '';
+            document.getElementById('fijoRif').value = c.rif || '';
+            document.getElementById('fijoTelefono').value = c.telefono || '';
+            document.getElementById('fijoCorreo').value = c.correo || '';
+            document.getElementById('fijoDireccion').value = c.direccion || '';
+            document.getElementById('fijoNotas').value = c.notas || '';
+            document.getElementById('btnGuardarClienteFijo').innerText = "Actualizar Cliente Fijo";
+            document.getElementById('btnCancelarEdicionCliente').style.display = "block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function cancelarEdicionClienteFijo() {
+            document.getElementById('editandoClienteId').value = '';
+            document.getElementById('clienteFijoForm').reset();
+            document.getElementById('btnGuardarClienteFijo').innerText = "Guardar Cliente";
+            document.getElementById('btnCancelarEdicionCliente').style.display = "none";
+        }
+
+        function eliminarClienteFijo(id) {
+            if (confirm('¿Desea eliminar este cliente de la base de datos fija?')) {
+                clientesFijosBD = clientesFijosBD.filter(c => c.id !== id);
+                localStorage.setItem('clientes_fijos_bd_v1', JSON.stringify(clientesFijosBD));
+                renderizarClientesFijosTabla();
+                registrarAuditoria('CLIENTES FIJOS', 'Se eliminó un cliente de la base de datos fija.');
+            }
+        }
+
+        function filtrarClientesFijosTabla() {
+            const query = document.getElementById('buscarClientesFijos').value.toLowerCase();
+            const filas = document.querySelectorAll('#tablaClientesFijosGeneral tbody tr');
+            filas.forEach(fila => {
+                fila.style.display = fila.innerText.toLowerCase().includes(query) ? '' : 'none';
+            });
+        }
+
+        function usarClienteFijoEnPedido(nombre, telefono) {
+            document.getElementById('cliente').value = nombre;
+            document.getElementById('contacto').value = telefono;
+            autoGuardarBorrador();
+            cambiarPestana('pedidosTab', document.querySelector('.tab-btn'));
+            alert(`¡Cliente ${nombre} cargado en el formulario de pedidos!`);
+        }
+
+        function cargarPedidoParaEditar(id) {
+            const pedido = pedidos.find(p => p.id === id);
+            if (!pedido) return;
+
+            document.getElementById('editandoId').value = pedido.id;
+            document.getElementById('formTitle').innerText = "Editar Pedido / Talonario #" + (pedido.numeracion || pedido.id);
+            document.getElementById('btnGuardarPedido').innerText = "Actualizar Pedido";
+            document.getElementById('btnCancelarEdicion').style.display = "block";
+
+            document.getElementById('vendedor').value = pedido.vendedor || '';
+            document.getElementById('disenador').value = pedido.disenador || '';
+            document.getElementById('numeracion').value = pedido.numeracion || '';
+            document.getElementById('fecha').value = pedido.fecha || '';
+            document.getElementById('cliente').value = pedido.cliente || '';
+            document.getElementById('contacto').value = pedido.contacto || '';
+
+            const rifsContainer = document.getElementById('rifsContainer');
+            rifsContainer.innerHTML = '';
+            if (pedido.rifs && pedido.rifs.length > 0) {
+                pedido.rifs.forEach(r => agregarCampoRif(r.rif, r.cantidad));
+            } else {
+                agregarCampoRif('', '');
+            }
+
+            document.getElementById('referidoEspecial').value = pedido.referidoEspecial || 'Ninguno';
+            document.getElementById('redSocial').value = pedido.redSocial || 'WhatsApp';
+            document.getElementById('tipoEntrega').value = pedido.tipoEntrega || 'Delivery';
+            document.getElementById('inversionPubli').value = pedido.inversionPubli || '0.00';
+            document.getElementById('nombreTalonario').value = pedido.nombreTalonario || '';
+            document.getElementById('detalles').value = pedido.detalles || '';
+            document.getElementById('tipoPapel').value = pedido.tipoPapel || 'vinyl';
+            document.getElementById('cantidad').value = pedido.cantidad || '';
+            document.getElementById('monto').value = pedido.monto || '';
+            document.getElementById('abono').value = pedido.abono || '0.00';
+            document.getElementById('moneda').value = pedido.moneda || 'USD';
+            document.getElementById('control').value = pedido.control || '';
+            document.getElementById('datosTalonario').value = pedido.datosTalonario || '';
+            document.getElementById('observaciones').value = pedido.observaciones || '';
+            document.getElementById('status').value = pedido.status || 'Pendiente';
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            notificarGuardado('Modo Edición Activo');
+        }
+
+        function cancelarEdicion() {
+            document.getElementById('editandoId').value = '';
+            document.getElementById('formTitle').innerText = "Nuevo Registro / Talonario";
+            document.getElementById('btnGuardarPedido').innerText = "Guardar Pedido";
+            document.getElementById('btnCancelarEdicion').style.display = "none";
+            limpiarFormularioCompleto();
+            recuperarBorradorFormulario();
+            notificarGuardado('Edición cancelada');
+        }
+
+        function registrarAuditoria(accion, detalle) {
+            const timestamp = new Date().toLocaleString('es-ES');
+            auditoria.unshift({ timestamp, accion, detalle });
+            if (auditoria.length > 100) auditoria.pop();
+            localStorage.setItem('auditoria_imprenta_v5', JSON.stringify(auditoria));
+            renderizarAuditoria();
+        }
+
+        function renderizarAuditoria() {
+            const container = document.getElementById('auditContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            if (auditoria.length === 0) {
+                container.innerHTML = '<div style="color: #64748b; text-align: center; padding: 10px;">No hay registros en la bitácora de auditoría.</div>';
+                return;
+            }
+            auditoria.forEach(item => {
+                container.innerHTML += `
+                <div class="audit-item">
+                    <span class="audit-time">[${item.timestamp}]</span>
+                    <span class="audit-action-tag">${item.accion}</span>: ${item.detalle}
+                </div>
+            `;
+            });
+        }
+
+        function limpiarAuditoria() {
+            if (confirm('¿Estás seguro de vaciar el registro de auditoría?')) {
+                auditoria = [];
+                localStorage.removeItem('auditoria_imprenta_v5');
+                renderizarAuditoria();
+                registrarAuditoria('SEGURIDAD', 'El registro de auditoría fue limpiado.');
+            }
+        }
+
+        function notificarGuardado(texto) {
+            const el = document.getElementById('saveText');
+            if (el) {
+                el.innerText = texto;
+                setTimeout(() => { el.innerText = "Protección Anti-Cortes Activa"; }, 2000);
+            }
+        }
+
+        document.getElementById('pedidoForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const editandoId = document.getElementById('editandoId').value;
+            const clienteNombre = document.getElementById('cliente').value.trim();
+            const clienteTel = document.getElementById('contacto').value.trim();
+
+            const rifsArray = [];
+            document.querySelectorAll('.rif-row').forEach(row => {
+                const r = row.querySelector('.rif-input').value.trim();
+                const c = row.querySelector('.cant-rif-input').value.trim();
+                if (r) rifsArray.push({ rif: r, cantidad: c });
+            });
+
+            const existeCliente = clientesBase.some(c => c.nombre.toLowerCase() === clienteNombre.toLowerCase() || c.tel === clienteTel);
+            if (!existeCliente && clienteNombre && clienteTel) {
+                clientesBase.push({ id: Date.now(), nombre: clienteNombre, tel: clienteTel });
+                localStorage.setItem('clientes_imprenta_base', JSON.stringify(clientesBase));
+                renderizarClientesBase();
+            }
+
+            const existeClienteFijo = clientesFijosBD.some(c => c.nombre.toLowerCase() === clienteNombre.toLowerCase());
+            if (!existeClienteFijo && clienteNombre) {
+                clientesFijosBD.push({ id: Date.now(), nombre: clienteNombre, rif: rifsArray.length > 0 ? rifsArray[0].rif : '', telefono: clienteTel, correo: '', direccion: '', notas: 'Registrado automáticamente desde pedido.' });
+                localStorage.setItem('clientes_fijos_bd_v1', JSON.stringify(clientesFijosBD));
+                renderizarClientesFijosTabla();
+            }
+
+            if (editandoId) {
+                const index = pedidos.findIndex(p => p.id == editandoId);
+                if (index !== -1) {
+                    pedidos[index] = {
+                        ...pedidos[index],
+                        vendedor: document.getElementById('vendedor').value.trim(),
+                        disenador: document.getElementById('disenador').value.trim(),
+                        numeracion: document.getElementById('numeracion').value,
+                        fecha: document.getElementById('fecha').value,
+                        cliente: clienteNombre,
+                        contacto: clienteTel,
+                        rifs: rifsArray,
+                        referidoEspecial: document.getElementById('referidoEspecial').value,
+                        redSocial: document.getElementById('redSocial').value,
+                        tipoEntrega: document.getElementById('tipoEntrega').value,
+                        inversionPubli: parseFloat(document.getElementById('inversionPubli').value) || 0,
+                        nombreTalonario: document.getElementById('nombreTalonario').value,
+                        detalles: document.getElementById('detalles').value,
+                        tipoPapel: document.getElementById('tipoPapel').value,
+                        cantidad: document.getElementById('cantidad').value,
+                        monto: parseFloat(document.getElementById('monto').value) || 0,
+                        abono: parseFloat(document.getElementById('abono').value) || 0,
+                        moneda: document.getElementById('moneda').value,
+                        control: document.getElementById('control').value,
+                        datosTalonario: document.getElementById('datosTalonario').value,
+                        observaciones: document.getElementById('observaciones').value,
+                        status: document.getElementById('status').value
+                    };
+                    registrarAuditoria('MODIFICACIÓN', `Pedido #${pedidos[index].numeracion || editandoId} (${clienteNombre}) fue actualizado correctamente.`);
+                }
+                cancelarEdicion();
+            } else {
+                const nuevoPedido = {
+                    id: Date.now(),
+                    vendedor: document.getElementById('vendedor').value.trim(),
+                    disenador: document.getElementById('disenador').value.trim(),
+                    numeracion: document.getElementById('numeracion').value,
+                    fecha: document.getElementById('fecha').value,
+                    cliente: clienteNombre,
+                    contacto: clienteTel,
+                    rifs: rifsArray,
+                    referidoEspecial: document.getElementById('referidoEspecial').value,
+                    redSocial: document.getElementById('redSocial').value,
+                    tipoEntrega: document.getElementById('tipoEntrega').value,
+                    inversionPubli: parseFloat(document.getElementById('inversionPubli').value) || 0,
+                    nombreTalonario: document.getElementById('nombreTalonario').value,
+                    detalles: document.getElementById('detalles').value,
+                    tipoPapel: document.getElementById('tipoPapel').value,
+                    cantidad: document.getElementById('cantidad').value,
+                    monto: parseFloat(document.getElementById('monto').value) || 0,
+                    abono: parseFloat(document.getElementById('abono').value) || 0,
+                    moneda: document.getElementById('moneda').value,
+                    control: document.getElementById('control').value,
+                    datosTalonario: document.getElementById('datosTalonario').value,
+                    observaciones: document.getElementById('observaciones').value,
+                    status: document.getElementById('status').value
+                };
+
+                pedidos.unshift(nuevoPedido);
+                registrarAuditoria('CREACIÓN', `Nuevo pedido / talonario #${nuevoPedido.numeracion || nuevoPedido.id} registrado para ${nuevoPedido.cliente}. Monto: ${nuevoPedido.monto} ${nuevoPedido.moneda}`);
+
+                const tabActual = clientesAbiertos.find(t => t.id === clienteActivoId);
+                if (tabActual) {
+                    tabActual.datos = {};
+                    tabActual.nombre = `Cliente ${clientesAbiertos.indexOf(tabActual) + 1}`;
+                    localStorage.setItem('clientes_abiertos_simultaneos', JSON.stringify(clientesAbiertos));
+                }
+
+                this.reset();
+                document.getElementById('rifsContainer').innerHTML = '';
+                agregarCampoRif('', '');
+                document.getElementById('fecha').valueAsDate = new Date();
+                document.getElementById('moneda').value = 'USD';
+                document.getElementById('referidoEspecial').value = 'Ninguno';
+                document.getElementById('tipoEntrega').value = 'Delivery';
+                document.getElementById('tipoPapel').value = 'vinyl';
+                document.getElementById('inversionPubli').value = '0.00';
+                document.getElementById('abono').value = '0.00';
+            }
+
+            guardarEnLocalStorage();
+            actualizarPantalla();
+        });
+
+        function guardarEnLocalStorage() {
+            localStorage.setItem('pedidos_imprenta_v5', JSON.stringify(pedidos));
+            notificarGuardado('Datos Resguardados');
+        }
+
+        function actualizarPantalla() {
+            renderizarTabla();
+            renderizarAnalisis();
+            renderizarRoiRoas();
+            renderizarAuditoria();
+            renderizarClientesBase();
+            renderizarClientesFijosTabla();
+        }
+
+        function obtenerPorcentajeSeguimiento(status) {
+            switch (status) {
+                case 'Pendiente': return 10;
+                case 'En Diseño': return 35;
+                case 'En Impresión': return 70;
+                case 'Entregado': return 100;
+                default: return 0;
+            }
+        }
+
+        function renderizarAnalisis() {
+            const redes = ['WhatsApp', 'Instagram', 'Facebook', 'TikTok', 'Otra'];
+            const stats = {};
+
+            redes.forEach(red => { stats[red] = { cantidad: 0, montos: { USD: 0, EUR: 0, VES: 0 } }; });
+
+            pedidos.forEach(p => {
+                const red = stats[p.redSocial] ? p.redSocial : 'Otra';
+                stats[red].cantidad += 1;
+                if (stats[red].montos[p.moneda] !== undefined) {
+                    stats[red].montos[p.moneda] += parseFloat(p.monto);
+                }
+            });
+
+            const container = document.getElementById('analyticsContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            redes.forEach(red => {
+                const cantidad = stats[red].cantidad;
+                const montos = stats[red].montos;
+
+                let montosHtml = '';
+                let tieneMontos = false;
+
+                if (montos.USD > 0) { montosHtml += `<div>$${montos.USD.toFixed(2)} USD</div>`; tieneMontos = true; }
+                if (montos.EUR > 0) { montosHtml += `<div>€${montos.EUR.toFixed(2)} EUR</div>`; tieneMontos = true; }
+                if (montos.VES > 0) { montosHtml += `<div>Bs ${montos.VES.toFixed(2)} VES</div>`; tieneMontos = true; }
+
+                if (!tieneMontos) { montosHtml = `<div style="color: var(--text-muted); font-size: 12px;">$0.00 USD</div>`; }
+
+                container.innerHTML += `
+                <div class="stat-card">
+                    <h4>${red}</h4>
+                    <div class="val">${montosHtml}</div>
+                    <div class="pct">${cantidad} pedidos</div>
+                </div>
+            `;
+            });
+        }
+
+        function renderizarRoiRoas() {
+            const redes = ['WhatsApp', 'Instagram', 'Facebook', 'TikTok', 'Otra'];
+            const statsROI = {};
+
+            redes.forEach(red => { statsROI[red] = { ingresosUSD: 0, inversionUSD: 0 }; });
+
+            pedidos.forEach(p => {
+                const red = statsROI[p.redSocial] ? p.redSocial : 'Otra';
+                let montoUSD = parseFloat(p.monto) || 0;
+                if (p.moneda === 'EUR') montoUSD *= 1.08;
+                if (p.moneda === 'VES') montoUSD = montoUSD / tasaDolar;
+
+                statsROI[red].ingresosUSD += montoUSD;
+                statsROI[red].inversionUSD += (parseFloat(p.inversionPubli) || 0);
+            });
+
+            const container = document.getElementById('roiContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            redes.forEach(red => {
+                const ing = statsROI[red].ingresosUSD;
+                const inv = statsROI[red].inversionUSD;
+
+                const roas = inv > 0 ? (ing / inv) : (ing > 0 ? 99.0 : 0.0);
+                const roi = inv > 0 ? (((ing - inv) / inv) * 100) : (ing > 0 ? 100 : 0);
+                const ganancia = ing - inv;
+
+                let recomendacion = "Mantener presupuesto";
+                if (roas >= 4) recomendacion = "Escalar inversión (+50%)";
+                else if (roas >= 2) recomendacion = "Rentable (Mantener/Subir 20%)";
+                else if (inv > 0 && roas < 1) recomendacion = "Pausar o ajustar anuncio";
+                else if (inv === 0 && ing > 0) recomendacion = "Probar invertir en Ads";
+                else recomendacion = "Sin actividad relevante";
+
+                container.innerHTML += `
+                <div class="roi-card">
+                    <span>${red}</span>
+                    <div style="font-size: 11px; margin-bottom: 4px; color:var(--text-muted);">Ingresos: $${ing.toFixed(2)} | Ads: $${inv.toFixed(2)}</div>
+                    <div>ROAS: <strong>${inv > 0 ? roas.toFixed(2) + 'x' : 'N/D'}</strong></div>
+                    <div>ROI: <strong style="color: ${roi >= 0 ? 'var(--success-color)' : 'var(--danger-color)'};">${roi.toFixed(1)}%</strong></div>
+                    <div>Ganancia: <strong>$${ganancia.toFixed(2)}</strong></div>
+                    <div style="font-size: 10px; margin-top: 6px; background: #f0fdf4; padding: 4px; border-radius: 4px; color: #166534; font-weight: 500;">${recomendacion}</div>
+                </div>
+            `;
+            });
+        }
+
+        function renderizarTabla() {
+            const lista = document.getElementById('listaPedidos');
+            if (!lista) return;
+            lista.innerHTML = '';
+
+            const pedidosOrdenados = [...pedidos].sort((a, b) => b.id - a.id);
+
+            pedidosOrdenados.forEach((pedido) => {
+                let badgeRed = 'bg-otros';
+                if (pedido.redSocial === 'WhatsApp') badgeRed = 'bg-whatsapp';
+                if (pedido.redSocial === 'Instagram') badgeRed = 'bg-instagram';
+                if (pedido.redSocial === 'Facebook') badgeRed = 'bg-facebook';
+                if (pedido.redSocial === 'TikTok') badgeRed = 'bg-tiktok';
+
+                const porcentaje = obtenerPorcentajeSeguimiento(pedido.status);
+                const pendiente = 100 - porcentaje;
+
+                let simboloMoneda = '$';
+                if (pedido.moneda === 'EUR') simboloMoneda = '€';
+                if (pedido.moneda === 'VES') simboloMoneda = 'Bs ';
+
+                const abonoVal = parseFloat(pedido.abono) || 0;
+                const montoVal = parseFloat(pedido.monto) || 0;
+                const saldoVal = montoVal - abonoVal;
+
+                let rifsHtml = '';
+                if (pedido.rifs && pedido.rifs.length > 0) {
+                    rifsHtml = `<div style="margin-top:4px; font-size:11px; color:#334155;"><strong>RIFs:</strong><br>`;
+                    pedido.rifs.forEach(r => { rifsHtml += `- ${r.rif} (${r.cant || r.cantidad || 'S/C'})<br>`; });
+                    rifsHtml += `</div>`;
+                }
+
+                let referidoHtml = '';
+                if (pedido.referidoEspecial && pedido.referidoEspecial !== 'Ninguno') {
+                    referidoHtml = `<br><span class="badge" style="background-color: var(--warning-color);">Ref: ${pedido.referidoEspecial}</span>`;
+                }
+
+                const mensajeWhatsApp = encodeURIComponent(
+                    `Hola ${pedido.cliente}, saludos desde la imprenta!\n` +
+                    `Tu pedido [${pedido.nombreTalonario || 'Talonario'}] se encuentra en estado: ${pedido.status} (${porcentaje}%).\n` +
+                    `Tipo de entrega: ${pedido.tipoEntrega || 'Delivery'}\n` +
+                    `Detalles: ${pedido.detalles}\n` +
+                    `Te avisaremos apenas esté listo!`
+                );
+
+                const telefonoLimpio = pedido.contacto.replace(/[^0-9]/g, '');
+                const urlWhatsApp = telefonoLimpio ? `https://wa.me/${telefonoLimpio}?text=${mensajeWhatsApp}` : `https://wa.me/?text=${mensajeWhatsApp}`;
+
+                const fila = document.createElement('tr');
+                fila.innerHTML = `
+                <td><strong>${pedido.vendedor || 'S/N'}</strong><br><small style="color:var(--text-muted);">${pedido.fecha}</small></td>
+                <td><span class="badge bg-disenador">${pedido.disenador || 'No asignado'}</span></td>
+                <td><strong>Núm:</strong> ${pedido.numeracion || 'S/N'}<br><strong>${pedido.cliente}</strong><br><small style="color:var(--text-muted);">Tel: ${pedido.contacto}</small>${rifsHtml}${referidoHtml}</td>
+                <td>
+                    <span class="badge ${badgeRed}">${pedido.redSocial}</span>
+                    <span class="badge bg-entrega">${pedido.tipoEntrega || 'Delivery'}</span><br>
+                    <strong>${pedido.nombreTalonario || '-'}</strong>
+                </td>
+                <td><strong style="color: var(--danger-color);">$${(parseFloat(pedido.inversionPubli) || 0).toFixed(2)}</strong></td>
+                <td>${pedido.detalles}<br><small style="color:var(--text-muted);">Papel/Material: ${pedido.tipoPapel || 'Estándar'}</small></td>
+                <td>Cant: ${pedido.cantidad || '-'}<br><small style="color:var(--text-muted);">Ctrl: ${pedido.control || '-'}</small><br><small style="color:var(--text-muted);">Datos: ${pedido.datosTalonario || '-'}</small></td>
+                <td>
+                    <strong>Tot:</strong> ${simboloMoneda}${montoVal.toFixed(2)} <small style="color:var(--text-muted);">(${pedido.moneda})</small><br>
+                    <span style="color: var(--success-color); font-weight:600;">Abono: ${simboloMoneda}${abonoVal.toFixed(2)}</span><br>
+                    <span style="color: var(--danger-color); font-weight:600;">Saldo: ${simboloMoneda}${saldoVal.toFixed(2)}</span>
+                </td>
+                <td>
+                    <select onchange="cambiarEstado(${pedido.id}, this.value)">
+                        <option value="Pendiente" ${pedido.status === 'Pendiente' ? 'selected' : ''}>Pendiente (10%)</option>
+                        <option value="En Diseño" ${pedido.status === 'En Diseño' ? 'selected' : ''}>En Diseño (35%)</option>
+                        <option value="En Impresión" ${pedido.status === 'En Impresión' ? 'selected' : ''}>En Impresión (70%)</option>
+                        <option value="Entregado" ${pedido.status === 'Entregado' ? 'selected' : ''}>Entregado (100%)</option>
+                    </select>
+                    <span class="progress-text">${porcentaje}% (Falta ${pendiente}%)</span>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: ${porcentaje}%;"></div>
+                    </div>
+                </td>
+                <td>
+                    <button class="edit-btn" onclick="cargarPedidoParaEditar(${pedido.id})">Editar</button><br>
+                    <button class="print-btn" onclick="imprimirOrdenProduccion(${pedido.id})">Ord. Producción</button><br>
+                    <button class="print-btn" style="background-color: var(--success-color);" onclick="imprimirOrdenFacturacion(${pedido.id})">Ord. Facturación</button><br>
+                    <a href="${urlWhatsApp}" target="_blank" class="msg-btn">Avisar</a><br>
+                    <button class="actions-btn" onclick="eliminarPedido(${pedido.id})">Eliminar</button>
+                </td>
+            `;
+                lista.appendChild(fila);
+            });
+        }
+
+        function imprimirOrdenProduccion(id) {
+            imprimirComprobanteEstiloCapture(id);
+        }
+
+        function imprimirOrdenFacturacion(id) {
+            imprimirComprobante(id, "Orden de Facturación");
+        }
+
+        function imprimirComprobanteEstiloCapture(id) {
+            const p = pedidos.find(pedido => pedido.id === id);
+            if (!p) return;
+
+            let rifsPrintHtml = 'N/A';
+            if (p.rifs && p.rifs.length > 0) {
+                rifsPrintHtml = '<ul style="margin:0; padding-left:15px;">';
+                p.rifs.forEach(r => {
+                    rifsPrintHtml += `<li><strong>RIF:</strong> ${r.rif} — <strong>Cantidad:</strong> ${r.cantidad || 'S/C'}</li>`;
+                });
+                rifsPrintHtml += '</ul>';
+            }
+
+            const ventanaImpresion = window.open('', '_blank');
+            ventanaImpresion.document.write(`
+            <!DOCTYPE html>
+            <html lang="es">
+            <head>
+                <meta charset="UTF-8">
+                <title>Orden de Producción #${p.numeracion || p.id}</title>
+                <style>
+                    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; color: #1e293b; background-color: #ffffff; }
+                    .print-container { max-width: 800px; margin: 0 auto; border: 1px solid #cbd5e1; border-radius: 8px; padding: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+                    .print-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #0f172a; padding-bottom: 15px; margin-bottom: 25px; }
+                    .print-header h2 { margin: 0; font-size: 22px; color: #0f172a; text-transform: uppercase; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                    th, td { border: 1px solid #cbd5e1; padding: 10px 14px; font-size: 13px; text-align: left; }
+                    th { background-color: #f8fafc; color: #475569; text-transform: uppercase; font-size: 11px; }
+                    td:first-child { font-weight: 600; width: 35%; background-color: #f8fafc; color: #334155; text-transform: uppercase; font-size: 11px; }
+                    td:last-child { width: 65%; color: #0f172a; }
+                    .print-footer { margin-top: 30px; text-align: center; font-size: 11px; color: #94a3b8; border-top: 1px dashed #cbd5e1; padding-top: 15px; }
+                    @media print { body { padding: 0; background: none; } .print-container { border: none; box-shadow: none; padding: 0; max-width: 100%; } }
+                </style>
+            </head>
+            <body>
+                <div class="print-container">
+                    <div class="print-header">
+                        <h2>Orden de Producción</h2>
+                        <div style="text-align:right; font-size:13px; color:#64748b;"><strong>Control:</strong> #${p.numeracion || p.id}<br><span>Fecha: ${p.fecha}</span></div>
+                    </div>
+                    <table>
+                        <tr><td>Numeración</td><td>${p.numeracion || 'S/N'}</td></tr>
+                        <tr><td>Fecha de Emisión</td><td>${p.fecha}</td></tr>
+                        <tr><td>Nombre del Cliente</td><td><strong>${p.cliente}</strong></td></tr>
+                        <tr><td>Teléfono del Cliente</td><td>${p.contacto}</td></tr>
+                        <tr><td>Distribución por RIF</td><td>${rifsPrintHtml}</td></tr>
+                        <tr><td>Referido Especial</td><td>${p.referidoEspecial || 'Ninguno'}</td></tr>
+                        <tr><td>Medio de Contacto</td><td>${p.redSocial}</td></tr>
+                        <tr><td>Nombre del Talonario</td><td>${p.nombreTalonario || 'N/A'}</td></tr>
+                        <tr><td>Detalle del Pedido</td><td><strong>${p.detalles}</strong></td></tr>
+                        <tr><td>Tipo de Papel / Material</td><td>${p.tipoPapel || 'N/A'}</td></tr>
+                        <tr><td>Cantidad Total</td><td>${p.cantidad || 'N/A'}</td></tr>
+                        <tr><td>Control Interno</td><td>${p.control || 'N/A'}</td></tr>
+                        <tr><td>Datos del Talonario</td><td>${p.datosTalonario || 'N/A'}</td></tr>
+                        <tr><td>Observaciones Adicionales</td><td>${p.observaciones || 'Ninguna'}</td></tr>
+                    </table>
+                    <div class="print-footer">Sistema de Control de Imprenta • Área de Producción</div>
+                </div>
+                <script>window.onload = function() { window.print(); window.close(); };<\/script>
+            </body>
+            </html>
+        `);
+            ventanaImpresion.document.close();
+            registrarAuditoria('IMPRESIÓN', `Se generó la Orden de Producción para el pedido #${p.numeracion || p.id} (${p.cliente}).`);
+        }
+
+        function imprimirComprobante(id, tituloDocumento) {
+            const p = pedidos.find(pedido => pedido.id === id);
+            if (!p) return;
+
+            let simboloMoneda = '$';
+            if (p.moneda === 'EUR') simboloMoneda = '€';
+            if (p.moneda === 'VES') simboloMoneda = 'Bs ';
+
+            const abonoVal = parseFloat(p.abono) || 0;
+            const montoVal = parseFloat(p.monto) || 0;
+            const saldoVal = montoVal - abonoVal;
+
+            let rifsPrintHtml = 'N/A';
+            if (p.rifs && p.rifs.length > 0) {
+                rifsPrintHtml = '<ul style="margin:0; padding-left:12px;">';
+                p.rifs.forEach(r => { rifsPrintHtml += `<li><strong>RIF:</strong> ${r.rif} — <strong>Cant:</strong> ${r.cantidad || 'S/C'}</li>`; });
+                rifsPrintHtml += '</ul>';
+            }
+
+            const ventanaImpresion = window.open('', '_blank');
+            ventanaImpresion.document.write(`
+            <!DOCTYPE html>
+            <html lang="es">
+            <head>
+                <meta charset="UTF-8">
+                <title>${tituloDocumento} #${p.numeracion || p.id}</title>
+                <style>
+                    @page { size: 14cm 21.5cm; margin: 6mm; }
+                    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; color: #1e293b; background-color: #ffffff; font-size: 10px; line-height: 1.2; }
+                    .print-container { width: 100%; max-width: 100%; margin: 0 auto; padding: 2px; }
+                    .print-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0f172a; padding-bottom: 4px; margin-bottom: 6px; }
+                    .print-header h1 { margin: 0; font-size: 13px; color: #0f172a; text-transform: uppercase; }
+                    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 6px; }
+                    .info-item { background: #f8fafc; padding: 4px 6px; border: 1px solid #cbd5e1; border-radius: 3px; font-size: 10px; }
+                    .info-item strong { color: #334155; display: block; margin-bottom: 1px; font-size: 8px; text-transform: uppercase; }
+                    .full-width { grid-column: span 2; }
+                    .print-footer { margin-top: 6px; text-align: center; font-size: 8px; color: #94a3b8; border-top: 1px dashed #cbd5e1; padding-top: 4px; }
+                </style>
+            </head>
+            <body>
+                <div class="print-container">
+                    <div class="print-header">
+                        <h1>${tituloDocumento}</h1>
+                        <div style="text-align:right; font-size:9px; color:#64748b;"><strong>Control:</strong> #${p.numeracion || p.id}<br><span>${p.fecha}</span></div>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item"><strong>Cliente</strong> ${p.cliente}</div>
+                        <div class="info-item"><strong>Teléfono</strong> ${p.contacto}</div>
+                        <div class="info-item"><strong>Vendedor</strong> ${p.vendedor || 'S/N'}</div>
+                        <div class="info-item"><strong>Diseñador</strong> ${p.disenador || 'S/N'}</div>
+                        <div class="info-item full-width"><strong>Distribución RIF</strong> ${rifsPrintHtml}</div>
+                        <div class="info-item"><strong>Medio / Entrega</strong> ${p.redSocial} / ${p.tipoEntrega || 'Delivery'}</div>
+                        <div class="info-item"><strong>Talonario</strong> ${p.nombreTalonario || 'N/A'}</div>
+                        <div class="info-item full-width"><strong>Detalle del Pedido</strong> ${p.detalles} (Papel: ${p.tipoPapel || 'Estándar'})</div>
+                        <div class="info-item"><strong>Cantidad / Control</strong> ${p.cantidad || 'N/A'} / ${p.control || 'N/A'}</div>
+                        <div class="info-item"><strong>Estado del Pedido</strong> ${p.status}</div>
+                        <div class="info-item full-width" style="background:#f1f5f9; font-weight:bold;">
+                            Monto Total: ${simboloMoneda}${montoVal.toFixed(2)} (${p.moneda}) | Abono: ${simboloMoneda}${abonoVal.toFixed(2)} | Saldo Pendiente: ${simboloMoneda}${saldoVal.toFixed(2)}
+                        </div>
+                    </div>
+                    <div class="print-footer">Sistema de Control de Imprenta • Comprobante Oficial</div>
+                </div>
+                <script>window.onload = function() { window.print(); window.close(); };<\/script>
+            </body>
+            </html>
+        `);
+            ventanaImpresion.document.close();
+            registrarAuditoria('IMPRESIÓN', `Se generó el comprobante de facturación para el pedido #${p.numeracion || p.id} (${p.cliente}).`);
+        }
+
+        function cambiarEstado(id, nuevoEstado) {
+            const pedido = pedidos.find(p => p.id === id);
+            if (pedido) {
+                const estadoAnterior = pedido.status;
+                pedido.status = nuevoEstado;
+                guardarEnLocalStorage();
+                renderizarTabla();
+                registrarAuditoria('ESTADO', `El pedido #${pedido.numeracion || id} (${pedido.cliente}) cambió su estado de "${estadoAnterior}" a "${nuevoEstado}".`);
+            }
+        }
+
+        function eliminarPedido(id) {
+            if (confirm('¿Estás seguro de eliminar este pedido del sistema?')) {
+                const pedidoEliminado = pedidos.find(p => p.id === id);
+                pedidos = pedidos.filter(p => p.id !== id);
+                guardarEnLocalStorage();
+                actualizarPantalla();
+                if (pedidoEliminado) {
+                    registrarAuditoria('ELIMINACIÓN', `Se eliminó el pedido #${pedidoEliminado.numeracion || id} de ${pedidoEliminado.cliente}.`);
+                }
+            }
+        }
+
+        function filtrarPedidos() {
+            const query = document.getElementById('buscar').value.toLowerCase();
+            const filas = document.querySelectorAll('#tablaPedidos tbody tr');
+            filas.forEach(fila => {
+                fila.style.display = fila.innerText.toLowerCase().includes(query) ? '' : 'none';
+            });
+        }
+
+        function exportarExcelCSV() {
+            let csv = '\uFEFFVendedor;Diseñador;Numeracion;Fecha;Cliente;Contacto;RedSocial;TipoEntrega;InversionAds;NombreTalonario;Detalles;TipoPapel;Cantidad;Monto;Moneda;Abono;Control;DatosTalonario;Observaciones;Status\n';
+            pedidos.forEach(p => {
+                csv += `"${p.vendedor || ''}";"${p.disenador || ''}";"${p.numeracion || ''}";"${p.fecha || ''}";"${p.cliente || ''}";"${p.contacto || ''}";"${p.redSocial || ''}";"${p.tipoEntrega || ''}";"${p.inversionPubli || 0}";"${p.nombreTalonario || ''}";"${p.detalles || ''}";"${p.tipoPapel || ''}";"${p.cantidad || ''}";"${p.monto || 0}";"${p.moneda || 'USD'}";"${p.abono || 0}";"${p.control || ''}";"${p.datosTalonario || ''}";"${p.observaciones || ''}";"${p.status || ''}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Respaldo_Pedidos_Imprenta_${new Date().toISOString().slice(0, 10)}.csv`;
+            a.click();
+            registrarAuditoria('RESPALDO', 'Se descargó el respaldo en formato CSV compatible con Excel.');
+        }
+
+        // Funciones de Créditos
+        document.getElementById('creditoForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const nuevoCredito = {
+                id: Date.now(),
+                fecha: document.getElementById('creditoFecha').value,
+                nombre: document.getElementById('creditoNombre').value.trim(),
+                producto: document.getElementById('creditoProducto').value.trim(),
+                cantidad: document.getElementById('creditoCantidad').value.trim(),
+                monto: parseFloat(document.getElementById('creditoMonto').value) || 0,
+                estado: document.getElementById('creditoEstadoPago').value
+            };
+            creditos.unshift(nuevoCredito);
+            localStorage.setItem('creditos_imprenta_v1', JSON.stringify(creditos));
+            renderizarCreditos();
+            registrarAuditoria('CRÉDITO', `Nuevo registro de crédito/pago para ${nuevoCredito.nombre}. Monto: $${nuevoCredito.monto}`);
+            this.reset();
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            document.getElementById('creditoFecha').value = now.toISOString().slice(0, 16);
+            alert('¡Registro de crédito procesado exitosamente!');
+        });
+
+        function renderizarCreditos() {
+            const lista = document.getElementById('listaCreditos');
+            if (!lista) return;
+            lista.innerHTML = '';
+            if (creditos.length === 0) {
+                lista.innerHTML = '<tr><td colspan="6" style="text-align:center; color:#64748b;">No hay registros de créditos o pagos.</td></tr>';
+                return;
+            }
+            creditos.forEach(c => {
+                const esPago = c.estado === 'PAGO';
+                lista.innerHTML += `
+                <tr>
+                    <td><small>${c.fecha.replace('T', ' ')}</small></td>
+                    <td><strong>${c.nombre}</strong></td>
+                    <td>${c.producto || 'N/A'}<br><small style="color:var(--text-muted);">Cant: ${c.cantidad || '1'}</small></td>
+                    <td><strong>$${c.monto.toFixed(2)}</strong></td>
+                    <td><span class="badge" style="background-color: ${esPago ? 'var(--success-color)' : 'var(--danger-color)'};">${c.estado}</span></td>
+                    <td>
+                        <button class="select-client-btn" style="background-color: ${esPago ? 'var(--warning-color)' : 'var(--success-color)'};" onclick="cambiarEstadoCredito(${c.id})">${esPago ? 'Marcar Pendiente' : 'Marcar Pagado'}</button>
+                        <button class="actions-btn" style="width:auto; padding:4px 8px; margin-top:2px;" onclick="eliminarCredito(${c.id})">Eliminar</button>
+                    </td>
+                </tr>
+            `;
+            });
+        }
+
+        function cambiarEstadoCredito(id) {
+            const c = creditos.find(item => item.id === id);
+            if (c) {
+                c.estado = c.estado === 'PAGO' ? 'NO PAGO' : 'PAGO';
+                localStorage.setItem('creditos_imprenta_v1', JSON.stringify(creditos));
+                renderizarCreditos();
+                registrarAuditoria('CRÉDITO', `Se actualizó el estado de pago del cliente ${c.nombre} a ${c.estado}`);
+            }
+        }
+
+        function eliminarCredito(id) {
+            if (confirm('¿Eliminar este registro de crédito?')) {
+                creditos = creditos.filter(c => c.id !== id);
+                localStorage.setItem('creditos_imprenta_v1', JSON.stringify(creditos));
+                renderizarCreditos();
+                registrarAuditoria('CRÉDITO', 'Se eliminó un registro de crédito.');
+            }
+        }
+
+        function limpiarFormCredito() {
+            document.getElementById('creditoForm').reset();
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            document.getElementById('creditoFecha').value = now.toISOString().slice(0, 16);
+        }
+
+        function filtrarCreditos() {
+            const query = document.getElementById('buscarCredito').value.toLowerCase();
+            const filas = document.querySelectorAll('#tablaCreditos tbody tr');
+            filas.forEach(fila => {
+                fila.style.display = fila.innerText.toLowerCase().includes(query) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+
+</html>
